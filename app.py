@@ -9,9 +9,9 @@ def index():
 
 @app.route("/api/data")
 def get_data():
-    conn = sqlite3.connect("air_quality.db")
+    conn = sqlite3.connect("currency_db.db")
     cursor = conn.cursor()
-    query = "SELECT * FROM AirQuality"
+    query = "SELECT * FROM currency_db"
     data = cursor.execute(query).fetchall()
     conn.close()
     return jsonify(data)
