@@ -1,56 +1,45 @@
 import psycopg2
-import csv
 import requests
 
 conn = psycopg2.connect(database="Currency_db")
 cursor = conn.cursor()
 
 cursor.execute('''
-CREATE TABLE AirQuality (
-    id INTEGER PRIMARY KEY,
-    city TEXT,
-    country TEXT,
-    latitude REAL,
-    longitude REAL,
-    parameter TEXT,
-    unit TEXT,
-    average REAL,
-    last_value REAL,
+CREATE TABLE Cryptocurrency (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    symbol TEXT,
+    price REAL,
+    market_cap REAL,
     last_updated TEXT
 )
 ''')
 
+cryptocurrencies = [
+    {"name": "Bitcoin", "symbol": "BTC", "url": "https://api.coindesk.com/v1/bpi/currentprice/BTC.json"},
+    {"name": "Gold", "symbol": "XAU", "url": "https://example.com/gold_api_endpoint"},  
+    {"name": "Silver", "symbol": "XAG", "url": "https://example.com/silver_api_endpoint"}  
+]
 
-url = "https://api.openaq.org/v2/locations?limit=100&page=1&offset=0&sort=desc&radius=1000&order_by=lastUpdated&dump_raw=false"
+for crypto in cryptocurrencies:
+    name = crypto["name"]
+    symbol = crypto["symbol"]
+    url = crypto["url"]
 
+    response = requests.get(url)
 
-response = requests.get(url, headers={"X-API-Key": "683f7e6a2369b52e9a6afb689d3405cf9f08767f94d9eace76bc46942900d9f1"})
+    if response.status_code == 200:
+        data = response.json()
+        price = data["price"]
+        market_cap = data["market_cap"]
+        last_updated = data["last_updated"]
 
-data = response.json()['results']
-
-for entry in data:
-    city = entry['city']
-    country = entry['country']
-    latitude = entry['coordinates']['latitude']
-    longitude = entry['coordinates']['longitude']
-    
-    for param in entry['parameters']:
-        parameter = param['parameter']
-        unit = param['unit']
-        average = param['average']
-        last_value = param['lastValue']
-        last_updated = param['lastUpdated']
-        
         cursor.execute('''
-        INSERT INTO AirQuality (
-            city, country, latitude, longitude, parameter, 
-            unit, average, last_value, last_updated
+        INSERT INTO Cryptocurrency (
+            name, symbol, price, market_cap, last_updated
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            city, country, latitude, longitude, parameter, 
-            unit, average, last_value, last_updated
-        ))
-        
+        VALUES (%s, %s, %s, %s, %s)
+        ''', (name, symbol, price, market_cap, last_updated))
+
 conn.commit()
 conn.close()
