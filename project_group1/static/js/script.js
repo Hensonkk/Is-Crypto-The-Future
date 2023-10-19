@@ -1,4 +1,3 @@
-
 let goldVotes = 0;
 let silverVotes = 0;
 let bitcoinVotes = 0;
@@ -40,10 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < data.length; i++){
 
                 m_y = data[i]["month_year"];
+                var dates = new Date(m_y).toLocaleDateString("en-US")
                 c_p = data[i]["closing_price"];
                 v = data[i]["volume"]
 
-                month_year.push(m_y);
+                month_year.push(dates);
                 closing_price.push(c_p);
                 volume.push(v);
         }
@@ -59,19 +59,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 name: 'Bitcoin Closing Price'
             };
             var trace2 = {
-                type: 'line',
+                type: 'bar',
                 x: month_year,
                 y: volume,
                 mode: 'lines+markers',
-                name: 'Bitcoin Volume'
+                name: 'Bitcoin Volume',
+                yaxis: 'y2',
+                opacity: 0.5
             };
             var layout = {
                 title: 'Bitcoin Closing Price & Volume',
-                xaxis: {title: 'Month & Year'},
-                yaxis1: {title: 'Closing Price'},
-                yaxis2: {title: 'Volume'}
+                xaxis: {showgrid: false, zeroline: false},
+                yaxis: {title: 'Closing Price'},
+                yaxis2: {title: 'Volume', overlaying: "y", side: 'right'}
             };
-            Plotly.newPlot('')
+            var data = [trace1, trace2]
+
+            Plotly.newPlot('bitcoin-graph', data, layout);
     });
     }
 );
@@ -89,10 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < data.length; i++){
 
                 m_y = data[i]["month_year"];
+                var dates = new Date(m_y).toLocaleDateString("en-US")
                 c_p = data[i]["closing_price"];
                 v = data[i]["volume"]
 
-                month_year.push(m_y);
+                month_year.push(dates);
                 closing_price.push(c_p);
                 volume.push(v);
         }
@@ -108,19 +113,23 @@ document.addEventListener("DOMContentLoaded", function () {
             name: 'Gold Closing Price'
         };
         var trace2 = {
-            type: 'line',
+            type: 'bar',
             x: month_year,
             y: volume,
             mode: 'lines+markers',
-            name: 'Gold Volume'
+            name: 'Gold Volume',
+            yaxis: 'y2',
+            opacity: 0.5
         };
         var layout = {
             title: 'Gold Closing Price & Volume',
-            xaxis: {title: 'Month & Year'},
-            yaxis1: {title: 'Closing Price'},
-            yaxis2: {title: 'Volume'}
+            xaxis: {showgrid: false, zeroline: false},
+            yaxis: {title: 'Closing Price'},
+            yaxis2: {title: 'Volume', overlaying: "y", side: 'right'}
         };
-        Plotly.newPlot('')
+        var data = [trace1, trace2]
+
+        Plotly.newPlot('gold-graph', data, layout);
     }
         )
     }
@@ -139,10 +148,11 @@ document.addEventListener("DOMContentLoaded", function () {
             for (let i = 0; i < data.length; i++){
 
                 m_y = data[i]["month_year"];
+                var dates = new Date(m_y).toLocaleDateString("en-US");
                 c_p = data[i]["closing_price"];
                 v = data[i]["volume"]
 
-                month_year.push(m_y);
+                month_year.push(dates);
                 closing_price.push(c_p);
                 volume.push(v);
         }
@@ -158,19 +168,23 @@ document.addEventListener("DOMContentLoaded", function () {
             name: 'Silver Closing Price'
         };
         var trace2 = {
-            type: 'line',
+            type: 'bar',
             x: month_year,
             y: volume,
             mode: 'lines+markers',
-            name: 'Silver Volume'
+            name: 'Silver Volume',
+            yaxis: 'y2',
+            opacity: 0.5
         };
         var layout = {
             title: 'Silver Closing Price & Volume',
-            xaxis: {title: 'Month & Year'},
+            xaxis: {showgrid: false, zeroline: false},
             yaxis1: {title: 'Closing Price'},
-            yaxis2: {title: 'Volume'}
+            yaxis2: {title: 'Volume', overlaying: "y", side: 'right'}
         };
-        Plotly.newPlot()
+        var data = [trace1, trace2]
+
+        Plotly.newPlot('silver-graph', data, layout);
     }
         )
     }
