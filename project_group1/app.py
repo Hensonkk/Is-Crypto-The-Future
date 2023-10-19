@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("Project3dashboard.html")
+    return render_template("index.html") # templates/index.html
 
 @app.route("/api/bitcoin")
 def get_bitcoin():
